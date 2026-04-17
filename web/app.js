@@ -898,6 +898,68 @@
     URL.revokeObjectURL(url);
   }
 
+  // ── AboutModal ─────────────────────────────────────────
+  function AboutModal(props) {
+    return h(Modal, {
+      open: props.open,
+      onCancel: props.onClose,
+      footer: h(Button, { type: 'primary', onClick: props.onClose }, 'Close'),
+      title: h('span', { style: { fontSize: 18, fontWeight: 700 } }, 'About TargetScout'),
+      width: 580,
+    },
+      h('div', { className: 'about-body' },
+        h('p', { className: 'about-tagline' },
+          'AI-assisted target identification and prioritization for drug discovery programs.'
+        ),
+        h(Divider, { style: { margin: '14px 0' } }),
+
+        h('h4', { className: 'about-section-heading' }, 'What it does'),
+        h('p', { className: 'about-para' },
+          'TargetScout aggregates multi-source evidence to rank disease-relevant protein targets, '
+          + 'visualizes protein–protein interaction networks, and surfaces competitive intelligence '
+          + 'from active clinical programs — all in a single workflow.'
+        ),
+
+        h('h4', { className: 'about-section-heading' }, 'Scoring'),
+        h('p', { className: 'about-para' },
+          'Each target receives a composite score (0–10) blending three weighted dimensions:'
+        ),
+        h('ul', { className: 'about-list' },
+          h('li', null, h('strong', null, 'Disease Association'), ' — genetic, literature and omics evidence from Open Targets Platform'),
+          h('li', null, h('strong', null, 'Tractability'), ' — small-molecule and antibody druggability assessment'),
+          h('li', null, h('strong', null, 'Novelty'), ' — inverse publication density; rewards under-explored targets')
+        ),
+        h('p', { className: 'about-para' },
+          'Weights can be adjusted in real time via the Weights panel. '
+          + 'Targets re-rank instantly without reloading data.'
+        ),
+
+        h('h4', { className: 'about-section-heading' }, 'Data sources'),
+        h('ul', { className: 'about-list' },
+          h('li', null, h('a', { href: 'https://platform.opentargets.org', target: '_blank', rel: 'noopener' }, 'Open Targets Platform'), ' — disease–target associations and evidence'),
+          h('li', null, h('a', { href: 'https://clinicaltrials.gov', target: '_blank', rel: 'noopener' }, 'ClinicalTrials.gov'), ' — competitive clinical programs per target'),
+          h('li', null, 'Protein–protein interaction network (curated PPI edges)'),
+          h('li', null, 'Domino Model Endpoint — AI narrative generation')
+        ),
+
+        h('h4', { className: 'about-section-heading' }, 'Domino Platform primitives'),
+        h('ul', { className: 'about-list' },
+          h('li', null, 'App Hosting — serves this interface'),
+          h('li', null, 'Model Endpoints — LLM-based narrative synthesis'),
+          h('li', null, 'Agent Orchestration — multi-step scoring pipeline'),
+          h('li', null, 'Scheduled Jobs — nightly data refresh from Open Targets'),
+          h('li', null, 'Datasets — curated PPI and tractability reference tables')
+        ),
+
+        h(Divider, { style: { margin: '14px 0' } }),
+        h('p', { style: { fontSize: 12, color: '#8F8FA3' } },
+          'Demo mode uses curated mock data for IPF, ALS and Ulcerative Colitis. '
+          + 'Toggle to Live to query the real Open Targets API (requires network access).'
+        )
+      )
+    );
+  }
+
   // ── Main App ───────────────────────────────────────────
   function App() {
     var _s0 = useState('');    var inputDisease = _s0[0]; var setInputDisease = _s0[1];
@@ -912,6 +974,7 @@
     var _s9 = useState({});    var trialsCache  = _s9[0]; var setTrialsCache  = _s9[1];
     var _sA = useState('');    var resolvedName = _sA[0]; var setResolvedName = _sA[1];
     var _sB = useState('');    var resolvedEfo  = _sB[0]; var setResolvedEfo  = _sB[1];
+    var _sAb = useState(false); var aboutOpen   = _sAb[0]; var setAboutOpen   = _sAb[1];
 
     // ── New feature state ─────────────────────────────
     var _sw = useState(Object.assign({}, DEFAULT_WEIGHTS));
@@ -1124,16 +1187,22 @@
 
     // ── Render ────────────────────────────────────────
     return h(ConfigProvider, { theme: dominoTheme },
-      h('div', { className: 'app-layout' },
+      h('div', { className: 'app-layout app-layout-no-topnav' },
 
-        // ── Header ─────────────────────────────────
-        h('div', { className: 'search-header' },
-          h('div', { className: 'search-header-inner' },
-            h('div', { className: 'app-logo' },
-              h('div', { className: 'app-logo-icon' }, 'TS'),
-              h('span', { className: 'app-logo-text' }, 'TargetScout')
+        // ── Main ───────────────────────────────────
+        h('div', { className: 'main-content' },
+
+          // ── Search card (replaces dark TopNav) ──
+          h('div', { className: 'search-card' },
+            h('div', { className: 'search-card-identity' },
+              h('span', { className: 'app-title' }, 'TargetScout'),
+              h('span', { className: 'app-subtitle' }, 'Target identification & prioritization for drug discovery'),
+              h('button', {
+                className: 'about-link',
+                onClick: function () { setAboutOpen(true); },
+              }, 'About')
             ),
-            h('div', { className: 'search-controls' },
+            h('div', { className: 'search-card-controls' },
               h(AutoComplete, {
                 className: 'disease-input',
                 value: inputDisease,
@@ -1145,11 +1214,11 @@
                     || d.label.toLowerCase().indexOf(inputDisease.toLowerCase()) !== -1;
                 }),
                 size: 'large',
-                style: { minWidth: 340 },
+                style: { flex: 1, minWidth: 260 },
                 children: h(Input, {
                   placeholder: 'Enter disease or indication \u2014 e.g. IPF, ALS, Ulcerative Colitis',
                   size: 'large',
-                  style: { background: '#fff', borderColor: '#C0C0D8', color: '#2E2E38' },
+                  style: { borderColor: '#C0C0D8' },
                   onPressEnter: function () { handleSearch(); },
                 })
               }),
@@ -1157,27 +1226,22 @@
                 type: 'primary', size: 'large', loading: loading,
                 onClick: function () { handleSearch(); },
                 className: 'search-btn',
-                style: { minWidth: 130 },
-              }, loading ? 'Analyzing\u2026' : 'Find Targets')
-            ),
-            h('div', { className: 'dummy-toggle' },
+                style: { minWidth: 130, flexShrink: 0 },
+              }, loading ? 'Analyzing\u2026' : 'Find Targets'),
               h(Tooltip, {
                 title: useDummy
-                  ? 'Using built-in demo data. Toggle off to query Open Targets + ClinicalTrials.gov live (requires network).'
-                  : 'Using live data from Open Targets + ClinicalTrials.gov.',
+                  ? 'Demo mode: using built-in data. Toggle to query Open Targets + ClinicalTrials.gov live.'
+                  : 'Live: querying Open Targets + ClinicalTrials.gov.',
                 placement: 'bottomRight',
               },
-                h('div', { style: { display: 'flex', alignItems: 'center', gap: 8, cursor: 'default' } },
+                h('div', { className: 'dummy-toggle' },
                   h('span', { className: 'dummy-toggle-label' }, useDummy ? 'Demo' : 'Live'),
                   h(Switch, { checked: useDummy, onChange: setUseDummy, size: 'small' })
                 )
               )
             )
-          )
-        ),
+          ),
 
-        // ── Main ───────────────────────────────────
-        h('div', { className: 'main-content' },
           summary
             ? h('div', { className: 'summary-bar' },
                 h('span', { className: 'summary-text' }, summary)
@@ -1366,6 +1430,12 @@
           open: compareOpen,
           onClose: function () { setCompareOpen(false); },
           narratives: narratives,
+        }),
+
+        // ── About modal ───────────────────────────
+        h(AboutModal, {
+          open: aboutOpen,
+          onClose: function () { setAboutOpen(false); },
         }),
 
         // ── Footer ────────────────────────────────
