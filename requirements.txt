@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+httpx
+diskcache
+pydantic
+python-multipart
