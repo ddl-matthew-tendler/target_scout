@@ -695,17 +695,17 @@ MOCK_DATA["t1d"] = MOCK_DATA["type 1 diabetes"];
 MOCK_DATA["diabetes"] = MOCK_DATA["type 1 diabetes"];
 
 var SUGGESTED_DISEASES = [
-  { value: "IPF", label: "IPF \u2014 Idiopathic Pulmonary Fibrosis" },
-  { value: "Ulcerative Colitis", label: "Ulcerative Colitis" },
   { value: "ALS", label: "ALS \u2014 Amyotrophic Lateral Sclerosis" },
-  { value: "Type 1 Diabetes", label: "Type 1 Diabetes (T1D)" },
-  { value: "NSCLC", label: "NSCLC \u2014 Non-small cell lung cancer" },
   { value: "Alzheimer's Disease", label: "Alzheimer\u2019s Disease" },
   { value: "Breast Cancer", label: "Breast Cancer" },
-  { value: "Type 2 Diabetes", label: "Type 2 Diabetes" },
+  { value: "Crohn's Disease", label: "Crohn\u2019s Disease" },
+  { value: "IPF", label: "IPF \u2014 Idiopathic Pulmonary Fibrosis" },
+  { value: "NSCLC", label: "NSCLC \u2014 Non-small cell lung cancer" },
   { value: "Psoriasis", label: "Psoriasis" },
   { value: "Rheumatoid Arthritis", label: "Rheumatoid Arthritis" },
-  { value: "Crohn's Disease", label: "Crohn\u2019s Disease" },
+  { value: "Type 1 Diabetes", label: "Type 1 Diabetes (T1D)" },
+  { value: "Type 2 Diabetes", label: "Type 2 Diabetes" },
+  { value: "Ulcerative Colitis", label: "Ulcerative Colitis" },
 ];
 
 var MOCK_TRIALS = {
