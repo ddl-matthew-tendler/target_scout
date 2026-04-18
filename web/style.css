@@ -427,7 +427,7 @@ body {
   font-size: 13px;
 }
 
-.graph-empty-text { color: #5050708; }
+/* .graph-empty-text color consolidated below in utility classes */
 
 .evidence-graph-svg {
   position: absolute;
@@ -904,3 +904,53 @@ body {
 .about-list li {
   margin-bottom: 4px;
 }
+
+/* ── Inline-style replacements ── */
+
+/* Drug tags */
+.drug-tags-list {
+  display: inline-flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.drug-tag { font-size: 10px !important; margin: 0 !important; }
+.drug-more-count { font-size: 10px; color: #65657B; }
+
+/* Target row checkbox */
+.target-row-checkbox { margin-right: 6px; flex-shrink: 0; }
+
+/* Weight sliders */
+.weight-slider-input { flex: 1; }
+.weight-reset-row { text-align: right; margin-top: 4px; }
+.weight-reset-btn { font-size: 11px !important; }
+
+/* Known drugs wrap */
+.known-drugs-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Trials */
+.no-trials-msg { font-size: 13px; color: #8F8FA3; }
+.trial-link { text-decoration: none; }
+.trial-sponsor-text { font-size: 11px; color: #8F8FA3; }
+
+/* Open Targets link */
+.ot-link-wrap { margin-top: 16px; }
+.ot-link-text { font-size: 12px; color: #543FDE; }
+.ot-link-text:hover { text-decoration: underline; color: #3B23D1; }
+
+/* About modal title */
+.about-modal-title { font-size: 18px; font-weight: 700; }
+.about-footer-note { font-size: 12px; color: #8F8FA3; }
+
+/* Panel header layout */
+.panel-header-left { flex: 1; min-width: 0; }
+.panel-header-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+
+/* Empty state icon */
+.empty-icon { font-size: 48px; opacity: 0.12; line-height: 1; }
+
+/* Legend cursor */
+.legend-item-clickable { cursor: pointer; }
+
+/* Graph empty text */
+.graph-empty-text { color: #6060A0; font-size: 13px; }

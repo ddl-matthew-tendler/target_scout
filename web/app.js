@@ -26,11 +26,14 @@
   var Fragment    = React.Fragment;
 
   // ── Theme ──────────────────────────────────────────────
+  // Source of truth: etan_workshop_app/.cursor/rules/how-to-build-domino-apps.mdc
+  // Primary purple (#543FDE) per workshop/Storybook; #3B3BD3 remains the "Primary Blue"
+  // semantic accent used for text links and data-type highlights (not button primary).
   var dominoTheme = {
     token: {
-      colorPrimary:       '#3B3BD3',
-      colorPrimaryHover:  '#2929C4',
-      colorPrimaryActive: '#1820A0',
+      colorPrimary:       '#543FDE',
+      colorPrimaryHover:  '#3B23D1',
+      colorPrimaryActive: '#311EAE',
       colorText:          '#2E2E38',
       colorTextSecondary: '#65657B',
       colorTextTertiary:  '#8F8FA3',
@@ -48,9 +51,18 @@
     },
     components: {
       Button: { primaryShadow: 'none', defaultShadow: 'none' },
-      Slider: { railBg: '#E0E0E8', trackBg: '#3B3BD3', handleColor: '#3B3BD3' },
+      Table:  { headerBg: '#FAFAFA', rowHoverBg: '#F5F5F5' },
+      Slider: { railBg: '#E0E0E8', trackBg: '#543FDE', handleColor: '#543FDE' },
     },
   };
+
+  // ── Highcharts global theme (workshop standard) ────────
+  if (typeof Highcharts !== 'undefined') {
+    Highcharts.setOptions({
+      colors: ['#543FDE', '#0070CC', '#28A464', '#CCB718', '#FF6543', '#E835A7', '#2EDCC4', '#A9734C'],
+      chart: { style: { fontFamily: 'Inter, Lato, Helvetica Neue, Arial, sans-serif' } },
+    });
+  }
 
   // ── Data-type colors & labels ──────────────────────────
   var DT_COLORS = {
@@ -210,9 +222,9 @@
     if (target.knownDrugs && target.knownDrugs.length > 0) {
       var shown = target.knownDrugs.slice(0, 2);
       var extra = target.numDrugs - shown.length;
-      drugTags = h('span', { style: { display: 'inline-flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' } },
-        shown.map(function (d) { return h(Tag, { key: d, color: 'green', style: { fontSize: 10, margin: 0 } }, d); }),
-        extra > 0 ? h('span', { style: { fontSize: 10, color: '#65657B' } }, '+' + extra + ' more') : null
+      drugTags = h('span', { className: 'drug-tags-list' },
+        shown.map(function (d) { return h(Tag, { key: d, color: 'green', className: 'drug-tag' }, d); }),
+        extra > 0 ? h('span', { className: 'drug-more-count' }, '+' + extra + ' more') : null
       );
     } else {
       drugTags = h(Tag, { color: 'volcano', style: { fontSize: 11 } }, 'No known drugs \u2014 novel target');
@@ -224,7 +236,7 @@
         h('div', { className: 'target-header-row' },
           // Compare checkbox — stops event bubbling so row click still works
           h('span', {
-            style: { marginRight: 6, flexShrink: 0 },
+            className: 'target-row-checkbox',
             onClick: function (e) { e.stopPropagation(); },
           },
             h(Tooltip, { title: compareChecked ? 'Remove from compare' : 'Add to compare', placement: 'top' },
@@ -293,7 +305,7 @@
             next[field] = v;
             onChange(next);
           },
-          style: { flex: 1 },
+          className: 'weight-slider-input',
           tooltip: { formatter: null },
         }),
         h('span', { className: 'weight-slider-value' }, weights[field].toFixed(1) + '\xd7')
@@ -304,8 +316,8 @@
       mk('disease', 'Disease assoc', '#3B3BD3'),
       mk('tract',   'Tractability',  '#28A464'),
       mk('novelty', 'Novelty',       '#E8620A'),
-      h('div', { style: { textAlign: 'right', marginTop: 4 } },
-        h(Button, { size: 'small', onClick: onReset, style: { fontSize: 11 } }, 'Reset defaults')
+      h('div', { className: 'weight-reset-row' },
+        h(Button, { size: 'small', onClick: onReset, className: 'weight-reset-btn' }, 'Reset defaults')
       )
     );
   }
@@ -808,7 +820,7 @@
       target.knownDrugs && target.knownDrugs.length > 0
         ? h('div', { className: 'detail-section' },
             h('div', { className: 'detail-section-title' }, 'Known Drugs'),
-            h('div', { style: { display: 'flex', gap: 6, flexWrap: 'wrap' } },
+            h('div', { className: 'known-drugs-wrap' },
               target.knownDrugs.map(function (d) {
                 return h(Tag, { key: d, color: 'green' }, d);
               })
@@ -824,7 +836,7 @@
         trials === undefined
           ? h(Skeleton, { active: true, paragraph: { rows: 2 }, title: false })
           : trials === null || trials.length === 0
-          ? h('p', { style: { fontSize: 13, color: '#8F8FA3' } }, 'No matching trials found.')
+          ? h('p', { className: 'no-trials-msg' }, 'No matching trials found.')
           : h('div', null,
               h('div', { className: 'pipeline-phase-bar' },
                 ['Phase I', 'Phase II', 'Phase III', 'Phase IV'].map(function (ph) {
@@ -845,7 +857,7 @@
               ),
               trials.map(function (trial) {
                 return h('div', { key: trial.nctId, className: 'trial-card' },
-                  h('a', { href: trial.url, target: '_blank', rel: 'noopener noreferrer', style: { textDecoration: 'none' } },
+                  h('a', { href: trial.url, target: '_blank', rel: 'noopener noreferrer', className: 'trial-link' },
                     h('p', { className: 'trial-title' }, trial.title),
                     h('div', { className: 'trial-meta' },
                       h('span', { className: 'trial-nct' }, trial.nctId),
@@ -853,7 +865,7 @@
                       h(Tag, { color: statusColor(trial.status), style: { fontSize: 10 } },
                         (trial.status || '').replace(/_/g, ' ')
                       ),
-                      trial.sponsor ? h('span', { style: { fontSize: 11, color: '#8F8FA3' } }, trial.sponsor) : null
+                      trial.sponsor ? h('span', { className: 'trial-sponsor-text' }, trial.sponsor) : null
                     )
                   )
                 );
@@ -863,11 +875,11 @@
 
       // Open Targets link
       target.ensemblId
-        ? h('div', { style: { marginTop: 16 } },
+        ? h('div', { className: 'ot-link-wrap' },
             h('a', {
               href: 'https://platform.opentargets.org/target/' + target.ensemblId,
               target: '_blank', rel: 'noopener noreferrer',
-              style: { fontSize: 12, color: '#3B3BD3' },
+              className: 'ot-link-text',
             }, '\u2197 View ' + target.symbol + ' on Open Targets Platform')
           )
         : null
@@ -904,7 +916,7 @@
       open: props.open,
       onCancel: props.onClose,
       footer: h(Button, { type: 'primary', onClick: props.onClose }, 'Close'),
-      title: h('span', { style: { fontSize: 18, fontWeight: 700 } }, 'About TargetScout'),
+      title: h('span', { className: 'about-modal-title' }, 'About TargetScout'),
       width: 580,
     },
       h('div', { className: 'about-body' },
@@ -952,8 +964,8 @@
         ),
 
         h(Divider, { style: { margin: '14px 0' } }),
-        h('p', { style: { fontSize: 12, color: '#8F8FA3' } },
-          'Demo mode uses curated mock data for IPF, ALS and Ulcerative Colitis. '
+        h('p', { className: 'about-footer-note' },
+          'Demo mode uses curated mock data for IPF, ALS, Ulcerative Colitis, and Type\u00a01 Diabetes. '
           + 'Toggle to Live to query the real Open Targets API (requires network access).'
         )
       )
@@ -1258,7 +1270,7 @@
             h('div', { className: 'targets-panel' },
 
               h('div', { className: 'panel-header' },
-                h('div', { style: { flex: 1, minWidth: 0 } },
+                h('div', { className: 'panel-header-left' },
                   h('span', { className: 'panel-title' },
                     rankedTargets.length ? 'Top ' + rankedTargets.length + ' Target Hypotheses' : 'Target Hypotheses'
                   ),
@@ -1271,7 +1283,7 @@
                     }, ' ' + resolvedEfo) : null
                   ) : null
                 ),
-                h('div', { style: { display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 } },
+                h('div', { className: 'panel-header-actions' },
                   compareSymbols.length >= 2
                     ? h(Button, {
                         size: 'small', type: 'primary',
@@ -1341,7 +1353,7 @@
                     })
                   )
                 : h('div', { className: 'empty-state' },
-                    h('div', { className: 'empty-icon', style: { fontSize: 48, opacity: 0.12, lineHeight: 1 } }, '\u25c6'),
+                    h('div', { className: 'empty-icon' }, '\u25c6'),
                     h('div', { className: 'empty-text' }, 'Enter a disease to discover targets'),
                     h('div', { className: 'empty-sub' },
                       'Powered by Open Targets Platform \u00b7 ClinicalTrials.gov \u00b7 Domino Model Endpoint \u00b7 Agent Orchestration'
@@ -1360,9 +1372,8 @@
                     var active = edgeFilter[item.key] !== false;
                     return h(Tooltip, { key: item.key, title: (active ? 'Hide ' : 'Show ') + label + ' edges' },
                       h('span', {
-                        className: 'legend-item' + (active ? '' : ' legend-item-dim'),
+                        className: 'legend-item' + (active ? '' : ' legend-item-dim') + ' legend-item-clickable',
                         onClick: function () { toggleEdge(item.key); },
-                        style: { cursor: 'pointer' },
                       },
                         h('span', {
                           className: 'legend-dot',
@@ -1390,7 +1401,7 @@
                   : h('div', { className: 'graph-empty' },
                       loading
                         ? h(Spin, { size: 'large' })
-                        : h('span', { className: 'graph-empty-text', style: { color: '#6060A0', fontSize: 13 } },
+                        : h('span', { className: 'graph-empty-text' },
                             'Evidence graph appears here'
                           )
                     )
