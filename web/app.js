@@ -922,7 +922,7 @@
       open: props.open,
       onCancel: props.onClose,
       footer: h(Button, { type: 'primary', onClick: props.onClose }, 'Close'),
-      title: h('span', { className: 'about-modal-title' }, 'About TargetScout'),
+      title: h('span', { className: 'about-modal-title' }, 'About TargetIQ'),
       width: 580,
     },
       h('div', { className: 'about-body' },
@@ -933,7 +933,7 @@
 
         h('h4', { className: 'about-section-heading' }, 'What it does'),
         h('p', { className: 'about-para' },
-          'TargetScout aggregates multi-source evidence to rank disease-relevant protein targets, '
+          'TargetIQ aggregates multi-source evidence to rank disease-relevant protein targets, '
           + 'visualizes protein–protein interaction networks, and surfaces competitive intelligence '
           + 'from active clinical programs — all in a single workflow.'
         ),
@@ -1385,7 +1385,7 @@
           // ── Search card (replaces dark TopNav) ──
           h('div', { className: 'search-card' },
             h('div', { className: 'search-card-identity' },
-              h('span', { className: 'app-title' }, 'TargetScout'),
+              h('span', { className: 'app-title' }, 'TargetIQ'),
               h('span', { className: 'app-subtitle' }, 'Target identification & prioritization for drug discovery'),
               h('button', {
                 className: 'about-link',
