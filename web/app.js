@@ -479,9 +479,13 @@
         return { source: '__d__', target: t.symbol, linkType: 'disease', dt: t.dominantDatatype, score: t.diseaseAssociation / 10 };
       });
 
-      var ppiEdges = ppiLinks.map(function (l) {
-        return { source: l.source, target: l.target, linkType: 'ppi', strength: l.strength, relation: l.relation };
-      });
+      // Only add PPI edges where BOTH endpoints are in the current node set
+      var symbolSet = new Set(targetNodes.map(function (n) { return n.id; }));
+      var ppiEdges = ppiLinks
+        .filter(function (l) { return symbolSet.has(l.source) && symbolSet.has(l.target); })
+        .map(function (l) {
+          return { source: l.source, target: l.target, linkType: 'ppi', strength: l.strength, relation: l.relation };
+        });
 
       var drugEdges = [];
       Object.keys(drugMap).forEach(function (d) {
