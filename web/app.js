@@ -17,6 +17,8 @@
   var Checkbox    = _antd.Checkbox;
   var Modal       = _antd.Modal;
   var Segmented   = _antd.Segmented;
+  var Steps       = _antd.Steps;
+  var Radio       = _antd.Radio;
 
   var h           = React.createElement;
   var useState    = React.useState;
@@ -976,6 +978,179 @@
     );
   }
 
+  // ── Setup Wizard ───────────────────────────────────────
+  function SetupWizard(props) {
+    var open = props.open; var onClose = props.onClose;
+    var connected = props.connected; var onGoLive = props.onGoLive;
+
+    var _ws = useState(0);        var step = _ws[0];      var setStep = _ws[1];
+    var _lc = useState('skip');   var llmChoice = _lc[0]; var setLlmChoice = _lc[1];
+    var _lu = useState('');       var llmUrl = _lu[0];    var setLlmUrl = _lu[1];
+    var _lk = useState('');       var llmKey = _lk[0];    var setLlmKey = _lk[1];
+    var _lm = useState('gpt-4o-mini'); var llmModel = _lm[0]; var setLlmModel = _lm[1];
+    var _cp = useState(null);     var copied = _cp[0];    var setCopied = _cp[1];
+
+    // Auto-advance past step 0 if backend already up
+    useEffect(function () {
+      if (open && step === 0 && connected) setStep(1);
+    }, [open, connected, step]);
+
+    // Poll health while waiting on step 0
+    useEffect(function () {
+      if (!open || step !== 0 || connected) return;
+      var id = setInterval(function () {
+        fetch('api/health')
+          .then(function (r) { if (r.ok) { clearInterval(id); setStep(1); } })
+          .catch(function () {});
+      }, 2000);
+      return function () { clearInterval(id); };
+    }, [open, step, connected]);
+
+    function copy(text, key) {
+      navigator.clipboard.writeText(text);
+      setCopied(key);
+      setTimeout(function () { setCopied(null); }, 2000);
+    }
+
+    function buildStartCmd() {
+      var base = 'uvicorn app.main:app --host 0.0.0.0 --port 8888';
+      if (llmChoice === 'domino' && llmUrl)
+        return 'DOMINO_MODEL_ENDPOINT_URL="' + llmUrl + '" \\\n  ' + base;
+      if (llmChoice === 'openai')
+        return 'LLM_ENDPOINT_URL="' + (llmUrl || 'https://api.openai.com/v1') + '" \\\n'
+          + '  LLM_API_KEY="' + llmKey + '" \\\n'
+          + '  LLM_MODEL="' + (llmModel || 'gpt-4o-mini') + '" \\\n'
+          + '  ' + base;
+      return base;
+    }
+
+    var cmdStyle = {
+      background: '#1a1a2e', color: '#c8d3f5', borderRadius: 6,
+      padding: '10px 14px', fontSize: 12, fontFamily: 'monospace',
+      margin: '8px 0', position: 'relative', overflowX: 'auto',
+    };
+
+    function CopyBtn(btnProps) {
+      return h(Button, {
+        size: 'small', style: { position: 'absolute', top: 8, right: 8 },
+        onClick: function () { copy(btnProps.text, btnProps.id); },
+      }, copied === btnProps.id ? '✓ Copied' : 'Copy');
+    }
+
+    function Step0() {
+      var cmd = buildStartCmd();
+      return h('div', null,
+        h('p', { style: { marginBottom: 12 } },
+          'The app backend (FastAPI) needs to be running. It serves both the API ',
+          h('em', null, 'and'), ' the frontend, so run it instead of the preview server.'
+        ),
+        h('p', { style: { fontWeight: 600, marginBottom: 6 } }, '1. Open a terminal in your project root:'),
+        h('div', { style: Object.assign({}, cmdStyle, { marginBottom: 16 }) },
+          h('pre', { style: { margin: 0, whiteSpace: 'pre-wrap' } }, cmd),
+          h(CopyBtn, { text: cmd, id: 'start' })
+        ),
+        h('p', { style: { fontWeight: 600, marginBottom: 6 } }, '2. Then open this URL in your browser:'),
+        h('div', { style: Object.assign({}, cmdStyle) },
+          h('pre', { style: { margin: 0 } }, 'http://localhost:8888'),
+          h(CopyBtn, { text: 'http://localhost:8888', id: 'url' })
+        ),
+        h('div', { style: { marginTop: 20, color: '#888', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 } },
+          h(Spin, { size: 'small' }),
+          'Waiting for server to respond at api/health\u2026'
+        )
+      );
+    }
+
+    function Step1() {
+      var cmd = buildStartCmd();
+      return h('div', null,
+        h('p', { style: { marginBottom: 16 } },
+          'Without an LLM, target narratives fall back to 10 hardcoded descriptions. '
+          + 'Configure one, or skip to use mock narratives.'
+        ),
+        h(Radio.Group, {
+          value: llmChoice,
+          onChange: function (e) { setLlmChoice(e.target.value); },
+          style: { display: 'flex', flexDirection: 'column', gap: 10 },
+        },
+          h(Radio, { value: 'domino' }, 'Domino Model Endpoint'),
+          llmChoice === 'domino'
+            ? h(Input, {
+                style: { marginLeft: 24, width: 'calc(100% - 24px)', marginTop: 4 },
+                placeholder: 'https://your-domino.com/models/llm/predictions',
+                value: llmUrl, onChange: function (e) { setLlmUrl(e.target.value); },
+              })
+            : null,
+          h(Radio, { value: 'openai' }, 'OpenAI-compatible endpoint'),
+          llmChoice === 'openai'
+            ? h('div', { style: { marginLeft: 24, display: 'flex', flexDirection: 'column', gap: 6, marginTop: 4 } },
+                h(Input, { placeholder: 'Base URL  (e.g. https://api.openai.com/v1)', value: llmUrl, onChange: function (e) { setLlmUrl(e.target.value); } }),
+                h(Input.Password, { placeholder: 'API key', value: llmKey, onChange: function (e) { setLlmKey(e.target.value); } }),
+                h(Input, { placeholder: 'Model name  (default: gpt-4o-mini)', value: llmModel, onChange: function (e) { setLlmModel(e.target.value); } })
+              )
+            : null,
+          h(Radio, { value: 'skip' }, 'Skip \u2014 use built-in mock narratives')
+        ),
+        llmChoice !== 'skip'
+          ? h('div', { style: { marginTop: 20 } },
+              h('p', { style: { fontSize: 13, color: '#888', marginBottom: 6 } },
+                'Restart the server with these env vars:'
+              ),
+              h('div', { style: cmdStyle },
+                h('pre', { style: { margin: 0, whiteSpace: 'pre-wrap' } }, cmd),
+                h(CopyBtn, { text: cmd, id: 'llm' })
+              )
+            )
+          : null
+      );
+    }
+
+    function Step2() {
+      return h('div', { style: { textAlign: 'center', padding: '24px 0' } },
+        h('div', { style: { fontSize: 52, marginBottom: 12 } }, '\u2713'),
+        h('p', { style: { fontSize: 16, fontWeight: 600, marginBottom: 8 } }, 'You\'re all set!'),
+        h('p', { style: { color: '#666' } },
+          'Make sure you\'re on ',
+          h('a', { href: 'http://localhost:8888', target: '_blank' }, 'localhost:8888'),
+          ', then click below to switch to Live mode.'
+        )
+      );
+    }
+
+    var footer = [
+      step > 0
+        ? h(Button, { key: 'back', onClick: function () { setStep(step - 1); } }, 'Back')
+        : null,
+      step === 0
+        ? h(Button, { key: 'skip1', onClick: function () { setStep(1); } }, 'Skip \u2192')
+        : null,
+      step === 1
+        ? h(Button, { key: 'next', type: 'primary', onClick: function () { setStep(2); } }, 'Next')
+        : null,
+      step === 2
+        ? h(Button, { key: 'done', type: 'primary', onClick: function () { onGoLive(); onClose(); setStep(0); } }, 'Switch to Live Mode')
+        : null,
+    ].filter(Boolean);
+
+    return h(Modal, {
+      open: open, onCancel: onClose, title: 'Live Mode Setup',
+      footer: footer, width: 580, destroyOnClose: true,
+    },
+      h(Steps, {
+        current: step, size: 'small',
+        style: { marginBottom: 28 },
+        items: [
+          { title: 'Start Server' },
+          { title: 'Configure LLM' },
+          { title: 'Go Live' },
+        ],
+      }),
+      step === 0 ? h(Step0, null)
+        : step === 1 ? h(Step1, null)
+        : h(Step2, null)
+    );
+  }
+
   // ── Main App ───────────────────────────────────────────
   function App() {
     var _s0 = useState('');    var inputDisease = _s0[0]; var setInputDisease = _s0[1];
@@ -991,6 +1166,7 @@
     var _sA = useState('');    var resolvedName = _sA[0]; var setResolvedName = _sA[1];
     var _sB = useState('');    var resolvedEfo  = _sB[0]; var setResolvedEfo  = _sB[1];
     var _sAb = useState(false); var aboutOpen   = _sAb[0]; var setAboutOpen   = _sAb[1];
+    var _sw2 = useState(false); var wizardOpen  = _sw2[0]; var setWizardOpen  = _sw2[1];
 
     // ── New feature state ─────────────────────────────
     var _sw = useState(Object.assign({}, DEFAULT_WEIGHTS));
@@ -1138,13 +1314,7 @@
         })
         .catch(function () {
           setLoading(false);
-          setUseDummy(true);
-          var key = query.toLowerCase();
-          var entry = MOCK_DATA[key] || MOCK_DATA['ipf'];
-          setTargets(entry.targets);
-          setPpiLinks(entry.ppiLinks || []);
-          setSummary(entry.summary || '');
-          streamDummyNarratives(entry.targets);
+          setSummary('Error: could not reach the backend API. Check that the server is running.');
         });
     }
 
@@ -1248,16 +1418,29 @@
                 className: 'search-btn',
                 style: { minWidth: 130, flexShrink: 0 },
               }, loading ? 'Analyzing\u2026' : 'Find Targets'),
-              h(Tooltip, {
-                title: useDummy
-                  ? 'Demo mode: using built-in data. Toggle to query Open Targets + ClinicalTrials.gov live.'
-                  : 'Live: querying Open Targets + ClinicalTrials.gov.',
-                placement: 'bottomRight',
-              },
-                h('div', { className: 'dummy-toggle' },
-                  h('span', { className: 'dummy-toggle-label' }, useDummy ? 'Demo' : 'Live'),
-                  h(Switch, { checked: useDummy, onChange: setUseDummy, size: 'small' })
-                )
+              h('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 } },
+                h(Tooltip, {
+                  title: useDummy
+                    ? 'Demo mode: using built-in data. Toggle to query Open Targets + ClinicalTrials.gov live.'
+                    : connected
+                      ? 'Live: querying Open Targets + ClinicalTrials.gov.'
+                      : 'Backend not detected. Click Setup to get started.',
+                  placement: 'bottomRight',
+                },
+                  h('div', { className: 'dummy-toggle' },
+                    h('span', { className: 'dummy-toggle-label' }, useDummy ? 'Demo' : 'Live'),
+                    h(Switch, { checked: useDummy, onChange: setUseDummy, size: 'small' })
+                  )
+                ),
+                h('button', {
+                  onClick: function () { setWizardOpen(true); },
+                  style: {
+                    background: 'none', border: 'none', padding: 0,
+                    fontSize: 11, color: connected ? '#28A464' : '#543FDE',
+                    cursor: 'pointer', textDecoration: 'underline',
+                    lineHeight: 1,
+                  },
+                }, connected ? '\u2713 Backend connected' : 'Setup live mode')
               )
             )
           ),
@@ -1455,6 +1638,14 @@
         h(AboutModal, {
           open: aboutOpen,
           onClose: function () { setAboutOpen(false); },
+        }),
+
+        // ── Setup wizard ──────────────────────────
+        h(SetupWizard, {
+          open: wizardOpen,
+          onClose: function () { setWizardOpen(false); },
+          connected: connected,
+          onGoLive: function () { setUseDummy(false); },
         }),
 
         // ── Footer ────────────────────────────────
