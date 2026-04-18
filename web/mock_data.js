@@ -509,15 +509,196 @@ var MOCK_DATA = {
   }
 };
 
+MOCK_DATA["type 1 diabetes"] = {
+  summary: "Open Targets identifies CD247 (CD3\u03b6) as the highest-confidence T1D target (9.4/10), with teplizumab's FDA approval in 2022 validating anti-CD3 therapy. 10 ranked targets span autoimmune, genetic, and pathway evidence \u2014 including 4 with active clinical programs and 3 high-novelty candidates with no approved drugs.",
+  ppiLinks: [
+    { source: 'CD247',  target: 'PTPN22', relation: 'negatively regulated by', strength: 0.82 },
+    { source: 'IL2RA',  target: 'FOXP3',  relation: 'drives expression of',   strength: 0.88 },
+    { source: 'CTLA4',  target: 'CD247',  relation: 'dampens signaling of',   strength: 0.75 },
+    { source: 'PTPN22', target: 'IL2RA',  relation: 'dephosphorylates',       strength: 0.70 },
+    { source: 'FOXP3',  target: 'IL2RA',  relation: 'co-expressed with',      strength: 0.65 },
+    { source: 'TNF',    target: 'IFNG',   relation: 'co-induced with',        strength: 0.60 },
+    { source: 'IFNG',   target: 'GAD2',   relation: 'promotes autoantigen presentation of', strength: 0.55 },
+    { source: 'SH2B3',  target: 'CD247',  relation: 'modulates JAK/TCR at',  strength: 0.50 },
+    { source: 'PTPN2',  target: 'IFNG',   relation: 'attenuates signaling of', strength: 0.68 },
+    { source: 'TNF',    target: 'CD247',  relation: 'inflammatory co-signal', strength: 0.45 },
+  ],
+  targets: [
+    {
+      symbol: "CD247", name: "T-cell surface glycoprotein CD3 zeta chain",
+      ensemblId: "ENSG00000198821",
+      diseaseAssociation: 9.4, tractability: 7.5, novelty: 5.5, composite: 9.4,
+      dominantDatatype: "genetic_association",
+      datatypeBreakdown: { genetic_association: 9.4, known_drugs: 8.0, literature: 8.5, pathways: 7.1 },
+      knownDrugs: ["Teplizumab", "Otelixizumab"], numDrugs: 3,
+      modality: "antibody",
+      yearTrend: [38, 45, 52, 61, 79, 94],
+      litPapers: [
+        { title: "Teplizumab delays type 1 diabetes progression in high-risk individuals: 3-year outcomes", journal: "N Engl J Med", year: 2022, pmid: "36351730" },
+        { title: "Anti-CD3 monoclonal antibody in new-onset type 1 diabetes: the Protégé trial", journal: "Lancet", year: 2021, pmid: "34592111" },
+        { title: "CD3\u03b6 chain phosphorylation as a pharmacodynamic marker for anti-CD3 therapy in T1D", journal: "J Clin Invest", year: 2020, pmid: "32281940" }
+      ],
+      narrative: "CD247 (CD3\u03b6) is the signaling component of the TCR complex and the molecular target of teplizumab, the first FDA-approved disease-modifying therapy for T1D (2022). Anti-CD3 therapy induces a tolerogenic regulatory T cell phenotype, delaying \u03b2-cell destruction. The approved teplizumab program validates this target beyond any other in T1D. Remaining clinical questions center on optimal treatment window and combination with IL-2 therapy to sustain Treg expansion."
+    },
+    {
+      symbol: "IL2RA", name: "Interleukin-2 receptor subunit alpha (CD25)",
+      ensemblId: "ENSG00000134460",
+      diseaseAssociation: 8.9, tractability: 7.0, novelty: 6.5, composite: 8.9,
+      dominantDatatype: "genetic_association",
+      datatypeBreakdown: { genetic_association: 8.9, literature: 7.8, pathways: 8.0, known_drugs: 4.5 },
+      knownDrugs: ["Low-dose IL-2"], numDrugs: 2,
+      modality: "mixed",
+      yearTrend: [28, 33, 41, 55, 68, 80],
+      litPapers: [
+        { title: "IL2RA locus confers T1D risk via reduced CD25 expression on regulatory T cells", journal: "Nature Genetics", year: 2021, pmid: "33986540" },
+        { title: "Low-dose IL-2 therapy selectively expands Tregs in new-onset T1D: TRANSREG trial", journal: "Nat Med", year: 2022, pmid: "35726064" },
+        { title: "CD25 polymorphism alters IL-2 responsiveness and Treg homeostasis in T1D", journal: "J Autoimmun", year: 2020, pmid: "32249076" }
+      ],
+      narrative: "IL2RA (CD25) is a high-confidence T1D genetic risk locus; risk alleles reduce CD25 surface expression on regulatory T cells, impairing IL-2 responsiveness and Treg homeostasis. Low-dose IL-2 therapy to expand Tregs has shown selective Treg expansion in the TRANSREG trial. The central mechanistic role of this axis in \u03b2-cell tolerance makes it one of the most compelling combination targets alongside anti-CD3."
+    },
+    {
+      symbol: "CTLA4", name: "Cytotoxic T-lymphocyte-associated protein 4",
+      ensemblId: "ENSG00000163599",
+      diseaseAssociation: 8.6, tractability: 8.0, novelty: 5.0, composite: 8.6,
+      dominantDatatype: "genetic_association",
+      datatypeBreakdown: { genetic_association: 8.6, known_drugs: 7.5, literature: 7.2, pathways: 6.8 },
+      knownDrugs: ["Abatacept"], numDrugs: 2,
+      modality: "antibody",
+      yearTrend: [42, 48, 53, 60, 72, 78],
+      litPapers: [
+        { title: "Abatacept preserves C-peptide in new-onset type 1 diabetes: 2-year TrialNet data", journal: "Diabetes", year: 2021, pmid: "33952604" },
+        { title: "CTLA4 +49A/G polymorphism and T1D susceptibility: updated meta-analysis of 28 studies", journal: "Diabetologia", year: 2020, pmid: "32088714" },
+        { title: "Co-stimulation blockade with abatacept modulates effector/regulatory T cell balance in T1D", journal: "J Immunol", year: 2022, pmid: "35534211" }
+      ],
+      narrative: "CTLA4 is a major genetic susceptibility locus for T1D, with risk alleles impairing co-stimulation checkpoint function in autoreactive T cells. Abatacept (CTLA4-Ig) demonstrated statistically significant preservation of \u03b2-cell function in TrialNet T1D trials, slowing C-peptide decline over 2 years. While efficacy is modest as monotherapy, CTLA4 agonism represents a validated combination partner for anti-CD3 and IL-2-based regimens."
+    },
+    {
+      symbol: "PTPN22", name: "Tyrosine-protein phosphatase non-receptor type 22",
+      ensemblId: "ENSG00000134242",
+      diseaseAssociation: 8.3, tractability: 5.5, novelty: 8.5, composite: 8.3,
+      dominantDatatype: "genetic_association",
+      datatypeBreakdown: { genetic_association: 8.3, literature: 6.5, pathways: 5.8 },
+      knownDrugs: [], numDrugs: 0,
+      modality: "small_molecule",
+      yearTrend: [15, 19, 27, 38, 52, 66],
+      litPapers: [
+        { title: "PTPN22 R620W gain-of-function impairs TCR-induced IL-2 and Treg suppressive capacity", journal: "Immunity", year: 2022, pmid: "35447085" },
+        { title: "Selective PTPN22 inhibition restores Treg function in NOD mice without systemic autoimmunity", journal: "Cell Chem Biol", year: 2023, pmid: "36731396" },
+        { title: "Allosteric inhibitors of LYP (PTPN22) as immunomodulatory leads for T1D", journal: "J Med Chem", year: 2021, pmid: "34355943" }
+      ],
+      narrative: "PTPN22 encodes LYP, a lymphoid phosphatase that dampens TCR signaling. The R620W gain-of-function variant is the second strongest T1D genetic risk locus after HLA, impairing Treg suppressive function and reducing central tolerance. No approved drug targets PTPN22, making it a compelling first-in-class opportunity. Selective allosteric inhibitors have restored Treg function in NOD mouse models with favorable specificity."
+    },
+    {
+      symbol: "GAD2", name: "Glutamate decarboxylase 2 (GAD65)",
+      ensemblId: "ENSG00000136750",
+      diseaseAssociation: 7.9, tractability: 5.0, novelty: 7.5, composite: 7.9,
+      dominantDatatype: "literature",
+      datatypeBreakdown: { literature: 7.9, genetic_association: 5.8, pathways: 4.5 },
+      knownDrugs: ["GAD-alum (investigational)"], numDrugs: 1,
+      modality: "mixed",
+      yearTrend: [30, 35, 38, 42, 50, 58],
+      litPapers: [
+        { title: "GAD65 autoantibodies as first-appearing T1D biomarkers and their role in antigen-specific tolerance induction", journal: "Diabetologia", year: 2021, pmid: "33398394" },
+        { title: "Antigen-specific therapy with GAD-alum in T1D: 5-year follow-up of the DIAGNODE-2 trial", journal: "Lancet Diabetes Endocrinol", year: 2023, pmid: "37290464" },
+        { title: "HLA-DR3/4-DQ8 stratification improves GAD65-based antigen-specific immunotherapy response", journal: "Nat Med", year: 2022, pmid: "35761083" }
+      ],
+      narrative: "GAD65 (GAD2) is the most prevalent autoantigen in T1D, present in 70\u201380% of newly diagnosed patients. Subcutaneous GAD-alum antigen-specific immunotherapy showed C-peptide preservation in HLA-DR3 stratified patients in DIAGNODE-2, making it the lead autoantigen tolerance platform. The HLA subgroup finding is critical: precision patient selection by HLA genotype may rescue a previously failed broad population trial strategy."
+    },
+    {
+      symbol: "FOXP3", name: "Forkhead box P3",
+      ensemblId: "ENSG00000049768",
+      diseaseAssociation: 7.5, tractability: 4.5, novelty: 9.2, composite: 7.5,
+      dominantDatatype: "pathways",
+      datatypeBreakdown: { pathways: 7.5, literature: 7.0, genetic_association: 5.0 },
+      knownDrugs: [], numDrugs: 0,
+      modality: "small_molecule",
+      yearTrend: [12, 15, 20, 29, 40, 55],
+      litPapers: [
+        { title: "FOXP3 post-translational modifications control Treg stability and suppress T1D in NOD mice", journal: "Science", year: 2022, pmid: "35271291" },
+        { title: "Small-molecule FOXP3 stabilizers enhance Treg suppressive function in human T1D", journal: "Cell Chem Biol", year: 2023, pmid: "36924782" },
+        { title: "Acetylation-dependent stabilisation of FOXP3 protects against islet autoimmunity", journal: "Nat Immunol", year: 2021, pmid: "33558696" }
+      ],
+      narrative: "FOXP3 is the master transcription factor for regulatory T cells and is essential for peripheral tolerance to islet autoantigens. While FOXP3 itself is considered undruggable, small-molecule strategies to stabilise FOXP3 protein via deacetylase inhibition or disrupting FOXP3-degradation complexes have shown proof-of-concept in NOD models. High novelty score reflects the lack of any approved FOXP3-targeting therapy \u2014 a first-in-class opportunity with large upside if oral bioavailability challenges are met."
+    },
+    {
+      symbol: "SH2B3", name: "SH2B adaptor protein 3 (LNK)",
+      ensemblId: "ENSG00000111252",
+      diseaseAssociation: 7.2, tractability: 5.0, novelty: 9.5, composite: 7.2,
+      dominantDatatype: "genetic_association",
+      datatypeBreakdown: { genetic_association: 7.2, literature: 5.5, pathways: 4.8 },
+      knownDrugs: [], numDrugs: 0,
+      modality: "small_molecule",
+      yearTrend: [5, 8, 12, 19, 30, 45],
+      litPapers: [
+        { title: "SH2B3 loss-of-function variants confer T1D risk and increase T cell sensitivity to IL-2", journal: "Am J Hum Genet", year: 2021, pmid: "33894145" },
+        { title: "LNK/SH2B3 restrains JAK2-mediated cytokine signalling in islet-infiltrating T cells", journal: "J Exp Med", year: 2022, pmid: "35551360" },
+        { title: "Genetic dissection of the SH2B3 T1D risk locus reveals regulatory T cell-intrinsic effects", journal: "PLoS Genet", year: 2020, pmid: "32379760" }
+      ],
+      narrative: "SH2B3 (LNK) negatively regulates JAK2 signalling downstream of multiple cytokine receptors. Loss-of-function variants in SH2B3 are associated with T1D, suggesting that hyper-reactive cytokine responses in T cells promote islet autoimmunity. Its high novelty score reflects the near-complete absence of direct SH2B3-targeting therapeutic programs \u2014 despite JAK pathway inhibitors already being approved, SH2B3 as a selective node within that pathway remains unexplored for T1D."
+    },
+    {
+      symbol: "IFNG", name: "Interferon gamma",
+      ensemblId: "ENSG00000111537",
+      diseaseAssociation: 7.0, tractability: 6.5, novelty: 6.0, composite: 7.0,
+      dominantDatatype: "literature",
+      datatypeBreakdown: { literature: 7.0, rna_expression: 6.8, pathways: 6.2, genetic_association: 3.5 },
+      knownDrugs: ["Emapalumab"], numDrugs: 1,
+      modality: "antibody",
+      yearTrend: [40, 44, 48, 55, 60, 65],
+      litPapers: [
+        { title: "IFN-\u03b3 drives MHC-I upregulation on \u03b2-cells, sensitizing them to CTL-mediated killing in T1D", journal: "Cell Metab", year: 2021, pmid: "34331863" },
+        { title: "Anti-IFN-\u03b3 therapy reduces insulitis and preserves \u03b2-cell mass in NOD and humanized mouse models", journal: "Diabetes", year: 2022, pmid: "35476178" },
+        { title: "Single-cell transcriptomics of T1D islets reveals IFN-\u03b3-driven MHC-I hyperexpression as a conserved signature", journal: "Nat Metab", year: 2023, pmid: "36797383" }
+      ],
+      narrative: "IFN-\u03b3 is the dominant cytokine driving MHC-I upregulation on \u03b2-cells, rendering them visible to cytotoxic T lymphocytes and triggering autoimmune destruction. Single-cell studies confirm an IFN-\u03b3 signature as one of the most reproducible features of T1D islet pathology across species. Emapalumab (anti-IFN-\u03b3) is approved for haemophagocytic lymphohistiocytosis, providing a direct path to T1D clinical testing with an existing regulatory-stage antibody."
+    },
+    {
+      symbol: "TNF", name: "Tumor necrosis factor",
+      ensemblId: "ENSG00000232810",
+      diseaseAssociation: 6.5, tractability: 9.0, novelty: 3.5, composite: 6.5,
+      dominantDatatype: "known_drugs",
+      datatypeBreakdown: { known_drugs: 9.0, literature: 6.5, genetic_association: 3.0, pathways: 5.8 },
+      knownDrugs: ["Etanercept", "Adalimumab", "Infliximab"], numDrugs: 5,
+      modality: "antibody",
+      yearTrend: [55, 58, 56, 60, 62, 60],
+      litPapers: [
+        { title: "TNF blockade fails to prevent T1D in NOD mice despite reducing insulitis", journal: "J Autoimmun", year: 2020, pmid: "31954567" },
+        { title: "TNFRSF11A genetic variants modulate \u03b2-cell apoptosis susceptibility in T1D", journal: "Diabetologia", year: 2021, pmid: "33492425" },
+        { title: "TNF/TNFR2 signaling paradoxically supports Treg function in islet microenvironment", journal: "Eur J Immunol", year: 2022, pmid: "35124814" }
+      ],
+      narrative: "TNF has mixed evidence in T1D: approved TNF inhibitors paradoxically show insufficient efficacy in islet autoimmunity trials, and some evidence suggests TNFR2 signaling supports Treg function in the islet microenvironment. TNF's extremely high tractability score reflects the depth of the approved drug arsenal, but its low novelty and ambiguous mechanism in T1D make it a lower-priority standalone target compared to CD3 or IL-2RA-directed approaches."
+    },
+    {
+      symbol: "PTPN2", name: "Tyrosine-protein phosphatase non-receptor type 2 (TC-PTP)",
+      ensemblId: "ENSG00000175354",
+      diseaseAssociation: 6.8, tractability: 5.0, novelty: 9.0, composite: 6.8,
+      dominantDatatype: "genetic_association",
+      datatypeBreakdown: { genetic_association: 6.8, pathways: 6.0, literature: 5.8 },
+      knownDrugs: [], numDrugs: 0,
+      modality: "small_molecule",
+      yearTrend: [8, 10, 14, 22, 35, 50],
+      litPapers: [
+        { title: "PTPN2 regulates \u03b2-cell IFN-\u03b1 and IFN-\u03b3 signalling and is a T1D risk gene", journal: "Nat Genet", year: 2020, pmid: "32747820" },
+        { title: "TC-PTP deficiency in \u03b2-cells amplifies IFN-\u03b3-induced MHC-I expression and autoantigen presentation", journal: "Diabetes", year: 2021, pmid: "34112678" },
+        { title: "Small-molecule TC-PTP inhibitors restore \u03b2-cell survival signalling under inflammatory conditions", journal: "Cell Chem Biol", year: 2023, pmid: "36931266" }
+      ],
+      narrative: "PTPN2 (TC-PTP) is a phosphatase highly expressed in \u03b2-cells that normally attenuates IFN-\u03b3 and IFN-\u03b1 signaling. T1D GWAS variants near PTPN2 reduce its expression in islets, amplifying interferon-driven MHC-I upregulation and autoantigen presentation. TC-PTP inhibition in non-\u03b2 tissues could enhance regulatory T cell signaling (JAK3/STAT5 pathway), while restoration in \u03b2-cells represents a distinct protective strategy. The dual therapeutic logic and complete absence of approved drugs give PTPN2 the highest novelty score in this panel."
+    }
+  ]
+};
+
 // Aliases for common abbreviations
 MOCK_DATA["idiopathic pulmonary fibrosis"] = MOCK_DATA["ipf"];
 MOCK_DATA["uc"] = MOCK_DATA["ulcerative colitis"];
 MOCK_DATA["amyotrophic lateral sclerosis"] = MOCK_DATA["als"];
+MOCK_DATA["t1d"] = MOCK_DATA["type 1 diabetes"];
+MOCK_DATA["diabetes"] = MOCK_DATA["type 1 diabetes"];
 
 var SUGGESTED_DISEASES = [
   { value: "IPF", label: "IPF \u2014 Idiopathic Pulmonary Fibrosis" },
   { value: "Ulcerative Colitis", label: "Ulcerative Colitis" },
   { value: "ALS", label: "ALS \u2014 Amyotrophic Lateral Sclerosis" },
+  { value: "Type 1 Diabetes", label: "Type 1 Diabetes (T1D)" },
   { value: "NSCLC", label: "NSCLC \u2014 Non-small cell lung cancer" },
   { value: "Alzheimer's Disease", label: "Alzheimer\u2019s Disease" },
   { value: "Breast Cancer", label: "Breast Cancer" },
@@ -543,6 +724,26 @@ var MOCK_TRIALS = {
   "SOD1": [
     { nctId: "NCT02623699", title: "Tofersen in SOD1 ALS", phase: "PHASE3", status: "COMPLETED", sponsor: "Biogen", url: "https://clinicaltrials.gov/study/NCT02623699" },
     { nctId: "NCT05089474", title: "Tofersen Long-Term Extension in SOD1 ALS", phase: "PHASE3", status: "ACTIVE_NOT_RECRUITING", sponsor: "Biogen", url: "https://clinicaltrials.gov/study/NCT05089474" },
+  ],
+  "CD247": [
+    { nctId: "NCT01030861", title: "Teplizumab (PRV-031) for Prevention of Clinical T1D in At-Risk Individuals", phase: "PHASE3", status: "COMPLETED", sponsor: "Provention Bio / Sanofi", url: "https://clinicaltrials.gov/study/NCT01030861" },
+    { nctId: "NCT03875729", title: "Teplizumab in Newly Diagnosed T1D (PROTECT)", phase: "PHASE3", status: "ACTIVE_NOT_RECRUITING", sponsor: "Sanofi", url: "https://clinicaltrials.gov/study/NCT03875729" },
+    { nctId: "NCT04597074", title: "Otelixizumab Plus Low-Dose IL-2 in Recent-Onset T1D", phase: "PHASE2", status: "RECRUITING", sponsor: "Genmab / ITN", url: "https://clinicaltrials.gov/study/NCT04597074" },
+  ],
+  "IL2RA": [
+    { nctId: "NCT01353833", title: "TRANSREG: Low-Dose IL-2 in T1D — Dose-Finding and Treg Expansion", phase: "PHASE2", status: "COMPLETED", sponsor: "AP-HP / ILTOO Pharma", url: "https://clinicaltrials.gov/study/NCT01353833" },
+    { nctId: "NCT04895722", title: "DILT1D-2: Titrated IL-2 to Expand Regulatory T Cells in T1D", phase: "PHASE2", status: "RECRUITING", sponsor: "University of Cambridge", url: "https://clinicaltrials.gov/study/NCT04895722" },
+  ],
+  "CTLA4": [
+    { nctId: "NCT00529035", title: "TrialNet Abatacept (CTLA4-Ig) in New-Onset T1D", phase: "PHASE2", status: "COMPLETED", sponsor: "Bristol Myers Squibb / TrialNet", url: "https://clinicaltrials.gov/study/NCT00529035" },
+    { nctId: "NCT04564287", title: "Abatacept Combination with Teplizumab in At-Risk T1D", phase: "PHASE2", status: "RECRUITING", sponsor: "JDRF / TrialNet", url: "https://clinicaltrials.gov/study/NCT04564287" },
+  ],
+  "GAD2": [
+    { nctId: "NCT02387164", title: "DIAGNODE-2: Intralymphatic GAD-Alum in T1D Patients with HLA-DR3", phase: "PHASE2", status: "COMPLETED", sponsor: "Diamyd Medical", url: "https://clinicaltrials.gov/study/NCT02387164" },
+    { nctId: "NCT04210375", title: "DIAGNODE-3: Intralymphatic GAD-Alum + Vitamin D in T1D", phase: "PHASE3", status: "ACTIVE_NOT_RECRUITING", sponsor: "Diamyd Medical", url: "https://clinicaltrials.gov/study/NCT04210375" },
+  ],
+  "IFNG": [
+    { nctId: "NCT04886700", title: "Emapalumab (Anti-IFN-\u03b3) in New-Onset Type 1 Diabetes", phase: "PHASE2", status: "RECRUITING", sponsor: "Swedish Orphan Biovitrum", url: "https://clinicaltrials.gov/study/NCT04886700" },
   ],
   "TNF": [
     { nctId: "NCT03945643", title: "Adalimumab vs Vedolizumab in UC", phase: "PHASE4", status: "COMPLETED", sponsor: "AbbVie", url: "https://clinicaltrials.gov/study/NCT03945643" },

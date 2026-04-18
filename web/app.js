@@ -1069,12 +1069,16 @@
             ipf: 'EFO_0000768', 'idiopathic pulmonary fibrosis': 'EFO_0000768',
             'ulcerative colitis': 'EFO_0000384', uc: 'EFO_0000384',
             als: 'EFO_0000253', 'amyotrophic lateral sclerosis': 'EFO_0000253',
+            't1d': 'EFO_0001359', 'type 1 diabetes': 'EFO_0001359',
+            'diabetes': 'EFO_0001359',
           };
           var nameMap = {
             ipf: 'Idiopathic pulmonary fibrosis',
             'ulcerative colitis': 'Ulcerative colitis', uc: 'Ulcerative colitis',
             als: 'Amyotrophic lateral sclerosis', 'amyotrophic lateral sclerosis': 'Amyotrophic lateral sclerosis',
             'idiopathic pulmonary fibrosis': 'Idiopathic pulmonary fibrosis',
+            't1d': 'Type 1 diabetes mellitus', 'type 1 diabetes': 'Type 1 diabetes mellitus',
+            'diabetes': 'Type 1 diabetes mellitus',
           };
           setResolvedName(nameMap[key] || (entry.targets[0] && query));
           setResolvedEfo(efoMap[key] || '');
