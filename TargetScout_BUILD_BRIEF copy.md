@@ -1,4 +1,4 @@
-# TargetScout — Build Brief for Claude Code
+# TargetIQ — Build Brief for Claude Code
 
 **Goal:** A vibe-coded Domino app that generates a ranked list of novel target hypotheses for a chosen disease, with an evidence graph, tractability scores, and a one-paragraph narrative per target — in under 10 seconds from one prompt.
 

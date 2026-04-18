@@ -1,4 +1,4 @@
-# UX Review: TargetScout
+# UX Review: TargetIQ
 
 Reviewed against Domino Design System guidelines (ux-review skill) and the 4 Core UX Principles.
 
