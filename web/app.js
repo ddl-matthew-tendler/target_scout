@@ -911,7 +911,7 @@
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'targetscout_' + (disease || 'results').replace(/\s+/g, '_').toLowerCase() + '.csv';
+    a.download = 'targetiq_' + (disease || 'results').replace(/\s+/g, '_').toLowerCase() + '.csv';
     a.click();
     URL.revokeObjectURL(url);
   }
