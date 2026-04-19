@@ -931,6 +931,38 @@
         ),
         h(Divider, { style: { margin: '14px 0' } }),
 
+        h('h4', { className: 'about-section-heading' }, 'The problem it solves'),
+        h('p', { className: 'about-para' },
+          'When a drug discovery team is handed a new disease indication, one of the first questions is: '
+          + h('em', null, '\u201cWhich protein targets are actually worth pursuing?\u201d').props.children
+          + ' Answering it today means days of manually cross-referencing databases — Open Targets for evidence scores, '
+          + 'ClinicalTrials.gov for competitive programs, PubMed for literature depth — then building a ranking in a spreadsheet '
+          + 'and writing up rationale for each candidate by hand.'
+        ),
+        h('div', { className: 'about-before-after' },
+          h('div', { className: 'about-before' },
+            h('div', { className: 'about-ba-label' }, 'Before TargetIQ'),
+            h('ul', { className: 'about-list' },
+              h('li', null, '3\u20135 days of manual database triage per indication'),
+              h('li', null, 'Rankings in spreadsheets — subjective, hard to defend'),
+              h('li', null, 'Siloed data: evidence, trials, and druggability in separate tabs'),
+              h('li', null, 'Rationale written from scratch for every portfolio review'),
+              h('li', null, 'Non-experts can\u2019t engage — outputs live in a scientist\u2019s head')
+            )
+          ),
+          h('div', { className: 'about-after' },
+            h('div', { className: 'about-ba-label' }, 'After TargetIQ'),
+            h('ul', { className: 'about-list' },
+              h('li', null, 'Ranked target list in under a minute for any disease'),
+              h('li', null, 'Transparent, adjustable scoring — defensible in a review meeting'),
+              h('li', null, 'Evidence, trials, and network context in one view'),
+              h('li', null, 'AI-generated narrative ready to drop into a slide or email'),
+              h('li', null, 'Anyone on the team can run a search and understand the output')
+            )
+          )
+        ),
+        h(Divider, { style: { margin: '14px 0' } }),
+
         h('h4', { className: 'about-section-heading' }, 'What it does'),
         h('p', { className: 'about-para' },
           'TargetIQ aggregates multi-source evidence to rank disease-relevant protein targets, '

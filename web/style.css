@@ -905,6 +905,43 @@ body {
   margin-bottom: 4px;
 }
 
+.about-before-after {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0 4px;
+}
+
+.about-before,
+.about-after {
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+
+.about-before {
+  background: #FFF5F5;
+  border: 1px solid #F5C2C2;
+}
+
+.about-after {
+  background: #F0FAF4;
+  border: 1px solid #A8DDB8;
+}
+
+.about-ba-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.about-before .about-ba-label { color: #C20A29; }
+.about-after  .about-ba-label { color: #28A464; }
+
+.about-before .about-list,
+.about-after  .about-list { margin-left: 14px; }
+
 /* ── Inline-style replacements ── */
 
 /* Drug tags */
